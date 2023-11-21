@@ -1,74 +1,60 @@
 class Nodo:
+    def __init__(self, valor):
+        self.valor = valor
+        self.hijos = []
 
-    def __init__(self, data):
-        self.dato = data
-        self.izquierda = None
-        self.derecha = None
-
-class Arbol_binario:
-
+class ArbolEnlazado:
     def __init__(self):
-        self.head = None
+        self.raiz = None
 
-    def insertar(self, data):
-        nuevo = Nodo(data)
+    def insertar(self, valor, padre=None):
+        nuevo_nodo = Nodo(valor)
 
-        if self.head is not None:
-            if data < self.head.dato:
-                if self.head.izquierda is None:
-                    self.head.izquierda = nuevo
-                else:
-                    self.head.izquierda.insertar(data)
-            elif data > self.head.dato:
-                if self.head.derecha is None:
-                    self.head.derecha = nuevo
-                else:
-                    self.head.derecha.insertar(data)
+        if padre is None:
+            if self.raiz is None:
+                self.raiz = nuevo_nodo
+            else:
+                print("Error: El árbol ya tiene una raíz.")
         else:
-            self.head = nuevo
+            padre.hijos.append(nuevo_nodo)
 
-    def Peso_arbol(self):
-        return self.contar_nodos(self.head)
-
-    def contar_nodos(self, nodo):
+    def peso_arbol(self, nodo=None):
         if nodo is None:
-            return 0
-        else:
-            return 1 + self.contar_nodos(nodo.izquierda) + self.contar_nodos(nodo.derecha)
+            nodo = self.raiz
+        peso = 1
+        for hijo in nodo.hijos:
+            peso += self.peso_arbol(hijo)
+        return peso
 
-    def Altura_arbol(self):
-        return self.altura(self.head)
-
-    def altura(self, nodo):
+    def orden_arbol(self, nodo=None):
         if nodo is None:
-            return 0
-        else:
-            izq_altura = self.altura(nodo.izquierda)
-            der_altura = self.altura(nodo.derecha)
-            return 1 + max(izq_altura, der_altura)
+            nodo = self.raiz
+        for hijo in nodo.hijos:
+            self.orden_arbol(hijo)
+            print(hijo.valor, end=' ')
+        if nodo == self.raiz:
+            print()
 
-    def imprimir_arbol(self):
-        self.inorden(self.head)
+    def altura_arbol(self, nodo=None):
+        if nodo is None:
+            nodo = self.raiz
+        if not nodo.hijos:
+            return 1
+        alturas_hijos = [self.altura_arbol(hijo) for hijo in nodo.hijos]
+        return 1 + max(alturas_hijos)
 
-    def inorden(self, nodo):
-        if nodo:
-            self.inorden(nodo.izquierda)
-            print(nodo.dato, end=' ')
-            self.inorden(nodo.derecha)
+arbol = ArbolEnlazado()
 
-arbol = Arbol_binario()
-arbol.insertar(5)
-arbol.insertar(3)
-arbol.insertar(7)
-arbol.insertar(2)
-arbol.insertar(4)
-arbol.insertar(6)
-arbol.insertar(8)
+while True:
+    opcion = input("Ingrese un nodo (o 'fin' para terminar): ")
+    if opcion.lower() == 'fin':
+        break
+    arbol.insertar(opcion)
 
-print("Peso del árbol:", arbol.Peso_arbol())
-print("Altura del árbol:", arbol.Altura_arbol())
-print("Árbol inorden:")
-arbol.imprimir_arbol()
+print("Peso del árbol:", arbol.peso_arbol())
+print("Orden del árbol:")
+arbol.orden_arbol()
+print("Altura del árbol:", arbol.altura_arbol())
 
 
 #Implemetación arboles binarios con Big three
