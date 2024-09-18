@@ -80,3 +80,36 @@ tree.add_node("A/E/G/H", {"color": "orange"})
 tree.add_node("A/E/G/I", {"color":"purple"})
 
 #Códigos ya establecidos anteriormente, solo copie y pegue de mi computadora, por esa razón no hay muchos cambios resgitrados
+
+
+
+fun = @(x) 2*x.^2 +5*x - 3
+x1 = input("Ingrese el primer valor de el intervalo: ");
+x2 = input("Ingrese el segundo valor de el intervalo: ");
+Iter = input("Ingrese el número de iteraciones: ");
+
+
+
+function root = my_bisection_function_Bryan_Silva(fun, x1, x2, Iter)
+    for i = 1:Iter
+        xr = (x1 + x2) / 2;
+        if fun(xr) == 0
+            root = xr;
+            return;
+        elseif fun(x1) * fun(xr) < 0
+            x2 = xr;
+        else
+            x1 = xr;
+        end
+    end
+    root = (x1 + x2) / 2; 
+end
+
+function Ver = verification_inter(fun, x1, x2)
+    while fun(x1) * fun(x2) > 0
+        disp("Ingrese una funcion valida: ");
+        break;
+    end
+        Ver = fun(x1) * fun(x2);
+ 
+end
